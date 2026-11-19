@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vorsilben im Alltag</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6578;
+    --accent:#2f5bea; --accent-soft:#e6ecff; --ok:#1f8a4c; --ok-soft:#e3f5ea;
+    --bad:#c23b3b; --bad-soft:#fbe7e7; --warn:#a86a00; --warn-soft:#fff3d6;
+    --merke:#fffbe8; --merke-line:#e9c94a; --line:#dde2ee;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:860px;margin:0 auto;padding:16px}
+  header.top{background:linear-gradient(135deg,#2f5bea,#5b3fd6);color:#fff;border-radius:16px;padding:18px 20px;margin-bottom:14px}
+  header.top h1{margin:0 0 4px;font-size:1.5rem}
+  header.top p{margin:0;opacity:.92}
+  .progress{height:10px;background:rgba(255,255,255,.3);border-radius:99px;margin-top:12px;overflow:hidden}
+  .progress>div{height:100%;background:#fff;width:0;transition:width .3s}
+  .ptext{font-size:.85rem;margin-top:6px;opacity:.95}
+  nav.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  nav.tabs button{flex:1 1 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 10px;font-size:.9rem;cursor:pointer}
+  nav.tabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  nav.tabs button .chk{margin-left:4px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+  h2{margin:0 0 6px;font-size:1.3rem}
+  .goal{color:var(--muted);margin:0 0 12px}
+  details.merke{background:var(--merke);border:2px dashed var(--merke-line);border-radius:12px;padding:12px 16px;margin-bottom:16px}
+  details.merke summary{cursor:pointer;font-weight:700}
+  details.merke .hint-copy{font-size:.85rem;color:var(--warn);margin-top:8px}
+  .merke table{border-collapse:collapse;margin:8px 0;width:100%;max-width:520px}
+  .merke td,.merke th{border:1px solid #d9c56a;padding:4px 8px;text-align:left}
+  .lernkarte{background:var(--merke);border-left:6px solid var(--merke-line);border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:1rem}
+  .lk-title{font-weight:700;font-size:.9rem;color:var(--warn);margin-bottom:4px}
+  .key{display:inline-block;min-width:1.6em;text-align:center;border:1px solid #b9c0d0;border-bottom-width:3px;border-radius:6px;background:#fff;padding:0 6px;font-size:.9em;font-weight:600;line-height:1.4}
+  .line>sup{align-self:flex-start}
+  .line>sup .in{margin-bottom:16px}
+  table.vtab{border-collapse:collapse;margin:8px 0 2px;font-size:.95rem}
+  table.vtab th,table.vtab td{border:1px solid #d9c56a;padding:3px 10px;text-align:left}
+  table.vtab th{background:#fbefb8}
+  .task{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;background:#fbfcff}
+  .task.done{border-color:#9fd3b4;background:#f6fcf8}
+  .task .num{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:700;border-radius:6px;padding:0 8px;margin-right:6px;font-size:.85rem}
+  .q{margin-bottom:8px}
+  .line{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:1.15rem}
+  input.in{font:inherit;font-size:1.05rem;padding:6px 8px;border:2px solid var(--line);border-radius:8px;width:150px;background:#fff}
+  input.in.small{width:70px}
+  sup input.in{width:64px;font-size:.9rem;padding:3px 6px;vertical-align:super}
+  input.in:focus{outline:none;border-color:var(--accent)}
+  select{font:inherit;padding:5px 8px;border-radius:8px;border:2px solid var(--line);background:#fff}
+  .opts{display:grid;gap:6px}
+  .opts label{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:#fff;cursor:pointer}
+  .match{display:grid;grid-template-columns:auto auto;gap:6px 12px;align-items:center;max-width:380px}
+  .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  button.b{font:inherit;font-size:.95rem;border:0;border-radius:8px;padding:7px 14px;cursor:pointer}
+  .b.check{background:var(--accent);color:#fff}
+  .b.tip{background:var(--warn-soft);color:var(--warn)}
+  .b.sol{background:#eef0f5;color:var(--muted)}
+  .b:disabled{opacity:.5;cursor:default}
+  .fb{margin-top:8px;border-radius:8px;padding:8px 10px;display:none}
+  .fb.ok{display:block;background:var(--ok-soft);color:var(--ok)}
+  .fb.bad{display:block;background:var(--bad-soft);color:var(--bad)}
+  .fb.info{display:block;background:var(--warn-soft);color:var(--warn)}
+  .navrow{display:flex;justify-content:space-between;gap:10px;margin-top:6px}
+  .navrow button{font:inherit;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;background:var(--accent);color:#fff}
+  .navrow button.ghost{background:#e4e8f2;color:var(--ink)}
+  table.res{border-collapse:collapse;width:100%;margin:10px 0}
+  table.res td,table.res th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+  .ampel{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:middle;margin-right:6px}
+  @media (max-width:520px){ .wrap{padding:10px} input.in{width:120px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Vorsilben im Alltag – kilo, mega, milli &amp; Co.</h1>
+    <p>Arbeite die Stationen der Reihe nach durch. Vor jedem Übungsblock hilft dir eine kurze Lernkarte.</p>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="ptext" id="ptext"></div>
+  </header>
+  <nav class="tabs" id="tabs"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const FAC = {G:1e9,M:1e6,k:1e3,'':1,c:1e-2,m:1e-3,'µ':1e-6,n:1e-9};
+const S = [
+ {
+  "title": "1 · Vorsilben kennenlernen",
+  "short": "Station 1",
+  "goal": "Ich kenne die Vorsilben und weiß, für welche Zahl sie stehen.",
+  "merke": "Eine <b>Vorsilbe</b> steht vor einer Einheit und ersetzt eine Zahl: <b>k</b>m = <b>1 000</b> m<table class=\"vtab\"><tr><th>Vorsilbe</th><th>Zeichen</th><th>Zahl</th><th>Zehnerpotenz</th></tr>\n<tr><td>Giga</td><td>G</td><td>1&nbsp;000&nbsp;000&nbsp;000</td><td>10<sup>9</sup></td></tr>\n<tr><td>Mega</td><td>M</td><td>1&nbsp;000&nbsp;000</td><td>10<sup>6</sup></td></tr>\n<tr><td>Kilo</td><td>k</td><td>1&nbsp;000</td><td>10<sup>3</sup></td></tr>\n<tr><td>Zenti</td><td>c</td><td>0,01</td><td>10<sup>−2</sup></td></tr>\n<tr><td>Milli</td><td>m</td><td>0,001</td><td>10<sup>−3</sup></td></tr>\n<tr><td>Mikro</td><td>µ</td><td>0,000&nbsp;001</td><td>10<sup>−6</sup></td></tr>\n<tr><td>Nano</td><td>n</td><td>0,000&nbsp;000&nbsp;001</td><td>10<sup>−9</sup></td></tr></table>",
+  "tasks": [
+   {
+    "type": "mc",
+    "q": "Was bedeutet das <b>k</b> in <b>k</b>m (Kilometer)?",
+    "opts": [
+     "10",
+     "100",
+     "1 000",
+     "1 000 000"
+    ],
+    "a": 2,
+    "hint": "Kilo = Tausend.",
+    "explain": "1 km = 1 000 m."
+   },
+   {
+    "type": "match",
+    "raw": true,
+    "q": "Ordne jeder Vorsilbe ihre Bedeutung zu.",
+    "items": [
+     [
+      "Kilo",
+      "Tausend"
+     ],
+     [
+      "Mega",
+      "Million"
+     ],
+     [
+      "Giga",
+      "Milliarde"
+     ],
+     [
+      "Milli",
+      "Tausendstel"
+     ],
+     [
+      "Zenti",
+      "Hundertstel"
+     ]
+    ],
+    "choices": [
+     "Hundertstel",
+     "Tausendstel",
+     "Tausend",
+     "Million",
+     "Milliarde"
+    ],
+    "hint": "Schau auf die Lernkarte."
+   },
+   {
+    "type": "match",
+    "raw": true,
+    "q": "Ordne jeder Vorsilbe ihr Zeichen zu.",
+    "items": [
+     [
+      "Giga",
+      "G"
+     ],
+     [
+      "Mega",
+      "M"
+     ],
+     [
+      "Kilo",
+      "k"
+     ],
+     [
+      "Milli",
+      "m"
+     ],
+     [
+      "Mikro",
+      "µ"
+     ],
+     [
+      "Nano",
+      "n"
+     ]
+    ],
+    "choices": [
+     "G",
+     "M",
+     "k",
+     "m",
+     "µ",
+     "n"
+    ],
+    "hint": "Achtung: M (groß) = Mega, m (klein) = Milli!"
+   },
+   {
+    "type": "match",
+    "raw": true,
+    "q": "Ordne jeder Vorsilbe die richtige Zahl zu.",
+    "items": [
+     [
+      "Kilo",
+      "1 000"
+     ],
+     [
+      "Mega",
+      "1 000 000"
+     ],
+     [
+      "Milli",
+      "0,001"
+     ],
+     [
+      "Zenti",
+      "0,01"
+     ],
+     [
+      "Mikro",
+      "0,000 001"
+     ]
+    ],
+    "choices": [
+     "0,000 001",
+     "0,001",
+     "0,01",
+     "1 000",
+     "1 000 000"
+    ],
+    "hint": "Große Vorsilben → große Zahlen, kleine Vorsilben → Zahlen mit Komma."
+   },
+   {
+    "type": "mc",
+    "q": "Welche Vorsilbe steht für ein <b>Tausendstel</b> (0,001)?",
+    "opts": [
+     "Kilo",
+     "Zenti",
+     "Milli",
+     "Mikro"
+    ],
+    "a": 2,
+    "hint": "Denk an mm (Millimeter): 1 000 mm = 1 m."
+   },
+   {
+    "type": "mc",
+    "q": "Wo begegnet dir die Vorsilbe <b>Giga</b> im Alltag?",
+    "opts": [
+     "beim Handyspeicher (GB)",
+     "beim Gewicht von Obst",
+     "bei der Länge eines Lineals",
+     "bei der Wassermenge im Glas"
+    ],
+    "a": 0,
+    "hint": "GB steht auf jedem Handy oder USB-Stick."
+   },
+   {
+    "type": "mc",
+    "q": "Was ist der Unterschied zwischen <b>M</b>W und <b>m</b>W?",
+    "opts": [
+     "Es gibt keinen Unterschied.",
+     "MW = Megawatt (Million), mW = Milliwatt (Tausendstel)",
+     "MW = Milliwatt, mW = Megawatt",
+     "Beides bedeutet 1 000 Watt."
+    ],
+    "a": 1,
+    "hint": "Groß- und Kleinschreibung ist wichtig!"
+   }
+  ]
+ },
+ {
+  "title": "2 · Vorsilbe → Zahl (groß)",
+  "short": "Station 2",
+  "goal": "Ich schreibe Angaben mit Kilo, Mega und Giga als Zahl ohne Vorsilbe.",
+  "merke": "Ersetze die Vorsilbe durch ihre Zahl und rechne <b>mal</b>:<br>3 <b>k</b>m = 3 · <b>1 000</b> m = 3 000 m<br>2,5 <b>M</b>B = 2,5 · <b>1 000 000</b> Byte = 2 500 000 Byte<br>Tipp: Komma um 3 (Kilo), 6 (Mega) oder 9 (Giga) Stellen nach <b>rechts</b>.",
+  "tasks": [
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "3 km =",
+    "post": "m",
+    "a": 3000,
+    "hint": "Kilo = 1 000. Rechne 3 · 1 000."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "5 kg =",
+    "post": "g",
+    "a": 5000,
+    "hint": "Kilo = 1 000. Rechne 5 · 1 000."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "2,5 kW =",
+    "post": "W",
+    "a": 2500,
+    "hint": "2,5 · 1 000: Komma 3 Stellen nach rechts."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "0,5 km =",
+    "post": "m",
+    "a": 500,
+    "hint": "0,5 · 1 000 = ?"
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "4 MB =",
+    "post": "Byte",
+    "a": 4000000,
+    "hint": "Mega = 1 000 000. Eine 4 mit 6 Nullen."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "1,5 MW =",
+    "post": "W",
+    "a": 1500000,
+    "hint": "1,5 · 1 000 000: Komma 6 Stellen nach rechts."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "2 GB =",
+    "post": "Byte",
+    "a": 2000000000,
+    "hint": "Giga = 1 000 000 000. Eine 2 mit 9 Nullen."
+   },
+   {
+    "type": "exp",
+    "q": "Schreibe mit Zehnerpotenz.",
+    "pre": "64 GB = 64 · 10",
+    "a": 9,
+    "post": "Byte",
+    "hint": "Giga = 10<sup>9</sup>."
+   },
+   {
+    "type": "mc",
+    "q": "Ein Lkw wiegt 12 t. Ein Kleinwagen wiegt 1 200 kg. Was stimmt?",
+    "opts": [
+     "Beide wiegen gleich viel.",
+     "Der Lkw wiegt 10-mal so viel.",
+     "Der Kleinwagen ist schwerer."
+    ],
+    "a": 1,
+    "hint": "1 t = 1 000 kg. Also 12 t = 12 000 kg.",
+    "explain": "12 t = 12 000 kg, und 12 000 : 1 200 = 10."
+   }
+  ]
+ },
+ {
+  "title": "3 · Zahl → Vorsilbe (groß)",
+  "short": "Station 3",
+  "goal": "Ich schreibe große Zahlen kürzer mit Kilo, Mega oder Giga.",
+  "merke": "Teile durch 1 000 (1 000 000 …) und setze die Vorsilbe davor:<br>4 000 W = 4 <b>k</b>W &nbsp;&nbsp;|&nbsp;&nbsp; 3 500 m = 3,5 <b>k</b>m &nbsp;&nbsp;|&nbsp;&nbsp; 2 000 000 Byte = 2 <b>M</b>B<br>Tipp: Je <b>3 Nullen</b> weniger → eine Vorsilbe weiter (k → M → G).<br>Wähle die Vorsilbe so, dass eine <b>handliche Zahl</b> entsteht (1 bis 999).",
+  "tasks": [
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "4 000 W =",
+    "unit": "W",
+    "a": 4,
+    "u": "k",
+    "opts": [
+     "",
+     "k",
+     "M",
+     "G"
+    ],
+    "hint": "4 000 : 1 000 = ? Dann k davor."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "7 000 g =",
+    "unit": "g",
+    "a": 7,
+    "u": "k",
+    "opts": [
+     "",
+     "k"
+    ],
+    "hint": "7 000 : 1 000 = ?"
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "3 500 m =",
+    "unit": "m",
+    "a": 3.5,
+    "u": "k",
+    "opts": [
+     "",
+     "k"
+    ],
+    "hint": "3 500 : 1 000 = 3,5"
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "2 000 000 Byte =",
+    "unit": "B",
+    "a": 2,
+    "u": "M",
+    "opts": [
+     "",
+     "k",
+     "M",
+     "G"
+    ],
+    "hint": "6 Nullen → Mega."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "8 000 000 000 Byte =",
+    "unit": "B",
+    "a": 8,
+    "u": "G",
+    "opts": [
+     "",
+     "k",
+     "M",
+     "G"
+    ],
+    "hint": "9 Nullen → Giga."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "250 000 W =",
+    "unit": "W",
+    "a": 250,
+    "u": "k",
+    "opts": [
+     "",
+     "k",
+     "M",
+     "G"
+    ],
+    "hint": "250 000 : 1 000 = 250 → kW."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "1 200 000 W =",
+    "unit": "W",
+    "a": 1.2,
+    "u": "M",
+    "opts": [
+     "",
+     "k",
+     "M",
+     "G"
+    ],
+    "hint": "1 200 000 : 1 000 000 = 1,2 → MW."
+   },
+   {
+    "type": "mc",
+    "q": "Ein Handy hat 128 000 000 000 Byte Speicher. Was steht auf der Verpackung?",
+    "opts": [
+     "128 kB",
+     "128 MB",
+     "128 GB",
+     "1,28 GB"
+    ],
+    "a": 2,
+    "hint": "Zähle die Nullen: 9 Nullen → Giga."
+   }
+  ]
+ },
+ {
+  "title": "4 · Vorsilbe → Zahl (klein)",
+  "short": "Station 4",
+  "goal": "Ich schreibe Angaben mit Zenti, Milli, Mikro und Nano als Zahl ohne Vorsilbe.",
+  "merke": "Ersetze die Vorsilbe durch ihre Zahl:<br>3 <b>m</b>m = 3 · <b>0,001</b> m = 0,003 m<br>25 <b>c</b>m = 25 · <b>0,01</b> m = 0,25 m<br>Tipp: Komma um 2 (Zenti), 3 (Milli), 6 (Mikro) oder 9 (Nano) Stellen nach <b>links</b>.",
+  "tasks": [
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "25 cm =",
+    "post": "m",
+    "a": 0.25,
+    "hint": "Zenti = 0,01: Komma 2 Stellen nach links."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "3 mm =",
+    "post": "m",
+    "a": 0.003,
+    "hint": "Milli = 0,001: Komma 3 Stellen nach links."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "500 mg =",
+    "post": "g",
+    "a": 0.5,
+    "hint": "500 · 0,001 = ? Komma 3 Stellen nach links."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "250 ml =",
+    "post": "l",
+    "a": 0.25,
+    "hint": "250 ml: Komma 3 Stellen nach links."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "2 ms =",
+    "post": "s",
+    "a": 0.002,
+    "hint": "2 ms = 2 · 0,001 s."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "5 µm =",
+    "post": "m",
+    "a": 5e-06,
+    "hint": "Mikro = 0,000 001: Komma 6 Stellen nach links."
+   },
+   {
+    "type": "exp",
+    "q": "Schreibe mit Zehnerpotenz.",
+    "pre": "7 nm = 7 · 10",
+    "a": -9,
+    "post": "m",
+    "hint": "Nano = 10<sup>−9</sup>. Minus nicht vergessen!"
+   },
+   {
+    "type": "mc",
+    "q": "Eine Flasche hat 750 ml. Wie viel Liter sind das?",
+    "opts": [
+     "7,5 l",
+     "75 l",
+     "0,75 l",
+     "0,075 l"
+    ],
+    "a": 2,
+    "hint": "750 : 1 000 = ?"
+   }
+  ]
+ },
+ {
+  "title": "5 · Zahl → Vorsilbe (klein)",
+  "short": "Station 5",
+  "goal": "Ich schreibe kleine Zahlen kürzer mit Zenti, Milli, Mikro oder Nano.",
+  "merke": "Rechne <b>mal</b> 1 000 (bei Milli) und setze die Vorsilbe davor:<br>0,004 m = 4 <b>m</b>m &nbsp;&nbsp;|&nbsp;&nbsp; 0,5 l = 500 <b>m</b>l &nbsp;&nbsp;|&nbsp;&nbsp; 0,75 m = 75 <b>c</b>m<br>Wähle die Vorsilbe so, dass eine <b>handliche Zahl</b> entsteht (1 bis 999).",
+  "tasks": [
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "0,004 m =",
+    "unit": "m",
+    "a": 4,
+    "u": "m",
+    "opts": [
+     "",
+     "c",
+     "m",
+     "µ",
+     "n"
+    ],
+    "hint": "0,004 · 1 000 = 4 → mm."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "0,5 l =",
+    "unit": "l",
+    "a": 500,
+    "u": "m",
+    "opts": [
+     "",
+     "c",
+     "m"
+    ],
+    "hint": "0,5 · 1 000 = 500 → ml."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "0,75 m =",
+    "unit": "m",
+    "a": 75,
+    "u": "c",
+    "opts": [
+     "",
+     "c",
+     "m",
+     "µ",
+     "n"
+    ],
+    "hint": "0,75 · 100 = 75 → cm."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "0,02 g =",
+    "unit": "g",
+    "a": 20,
+    "u": "m",
+    "opts": [
+     "",
+     "m",
+     "µ",
+     "n"
+    ],
+    "hint": "0,02 · 1 000 = 20 → mg."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "0,003 s =",
+    "unit": "s",
+    "a": 3,
+    "u": "m",
+    "opts": [
+     "",
+     "m",
+     "µ",
+     "n"
+    ],
+    "hint": "0,003 · 1 000 = 3 → ms."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "0,000 003 m =",
+    "unit": "m",
+    "a": 3,
+    "u": "µ",
+    "opts": [
+     "",
+     "c",
+     "m",
+     "µ",
+     "n"
+    ],
+    "hint": "6 Stellen nach dem Komma → Mikro."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "0,000 000 008 m =",
+    "unit": "m",
+    "a": 8,
+    "u": "n",
+    "opts": [
+     "",
+     "c",
+     "m",
+     "µ",
+     "n"
+    ],
+    "hint": "9 Stellen nach dem Komma → Nano."
+   },
+   {
+    "type": "mc",
+    "q": "Eine Tablette enthält 0,4 g Wirkstoff. Was steht auf der Packung?",
+    "opts": [
+     "4 mg",
+     "40 mg",
+     "400 mg",
+     "0,4 mg"
+    ],
+    "a": 2,
+    "hint": "0,4 · 1 000 = ?"
+   }
+  ]
+ },
+ {
+  "title": "6 · Abschluss-Check",
+  "short": "Check",
+  "goal": "Ich rechne sicher in beide Richtungen um.",
+  "merke": "<b>Vorsilbe → Zahl:</b> Vorsilbe durch ihre Zahl ersetzen (mal rechnen).<br><b>Zahl → Vorsilbe:</b> so umrechnen, dass eine handliche Zahl entsteht.<br>Giga 10<sup>9</sup> &nbsp;|&nbsp; Mega 10<sup>6</sup> &nbsp;|&nbsp; Kilo 10<sup>3</sup> &nbsp;|&nbsp; Zenti 10<sup>−2</sup> &nbsp;|&nbsp; Milli 10<sup>−3</sup> &nbsp;|&nbsp; Mikro 10<sup>−6</sup> &nbsp;|&nbsp; Nano 10<sup>−9</sup>",
+  "tasks": [
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "6 km =",
+    "post": "m",
+    "a": 6000,
+    "hint": "Kilo = 1 000."
+   },
+   {
+    "type": "num",
+    "q": "Rechne um.",
+    "pre": "40 cm =",
+    "post": "m",
+    "a": 0.4,
+    "hint": "Zenti = 0,01."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "5 000 000 W =",
+    "unit": "W",
+    "a": 5,
+    "u": "M",
+    "opts": [
+     "",
+     "k",
+     "M",
+     "G"
+    ],
+    "hint": "6 Nullen → Mega."
+   },
+   {
+    "type": "unit",
+    "q": "Schreibe mit passender Vorsilbe.",
+    "pre": "0,008 m =",
+    "unit": "m",
+    "a": 8,
+    "u": "m",
+    "opts": [
+     "",
+     "c",
+     "m",
+     "µ",
+     "n"
+    ],
+    "hint": "0,008 · 1 000 = 8."
+   },
+   {
+    "type": "mc",
+    "q": "Was ist länger: 1 500 m oder 1,2 km?",
+    "opts": [
+     "1 500 m",
+     "1,2 km",
+     "Beide gleich lang"
+    ],
+    "a": 0,
+    "hint": "Rechne 1,2 km in m um.",
+    "explain": "1,2 km = 1 200 m, also ist 1 500 m länger."
+   },
+   {
+    "type": "mc",
+    "q": "Ein Wasserkocher hat 2 kW. Ein Föhn hat 2 000 W. Welches Gerät hat mehr Leistung?",
+    "opts": [
+     "Wasserkocher",
+     "Föhn",
+     "Beide gleich"
+    ],
+    "a": 2,
+    "hint": "2 kW = 2 · 1 000 W.",
+    "explain": "2 kW = 2 000 W – beide sind gleich stark."
+   },
+   {
+    "type": "mc",
+    "q": "Ein Film ist 4 GB groß, ein Foto 4 MB. Wie viele Fotos passen ungefähr in die Größe des Films?",
+    "opts": [
+     "4",
+     "100",
+     "1 000",
+     "1 000 000"
+    ],
+    "a": 2,
+    "hint": "1 GB = 1 000 MB.",
+    "explain": "4 GB = 4 000 MB, und 4 000 : 4 = 1 000."
+   }
+  ]
+ }
+];
+
+const KEY="vorsilben-alltag-v1";
+let st={cur:0, t:{}};
+try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.t) st=s; }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+const id=(si,ti)=>si+"-"+ti;
+const ts=(si,ti)=>st.t[id(si,ti)]||(st.t[id(si,ti)]={tries:0,done:false,first:false,rev:false,val:null});
+
+function norm(s){
+  s=String(s==null?"":s).trim().replace(/[\s\u00a0\u202f']/g,"").replace(/[−–]/g,"-");
+  if(s==="") return NaN;
+  if(s.includes(",")) s=s.replace(/\./g,"").replace(",",".");
+  else if(/^-?[1-9]\d{0,2}(\.\d{3})+$/.test(s)) s=s.replace(/\./g,"");
+  if(!/^-?(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+  return parseFloat(s);
+}
+const eq=(a,b)=>Math.abs(a-b)<=Math.abs(b)*1e-9+1e-15;
+const supExp=n=>String(n).replace("-","−");
+function fmt(x){ // deutsche Schreibweise
+  if(Math.abs(x)>=1 && Number.isInteger(x)) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ");
+  let s=x.toFixed(12).replace(/0+$/,"").replace(/\.$/,"");
+  return s.replace(".",",");
+}
+function solText(t){
+  if(t.type==="num") return fmt(t.a);
+  if(t.type==="exp") return "10<sup>"+supExp(t.a)+"</sup>";
+  if(t.type==="sci") return fmt(t.m)+" · 10<sup>"+supExp(t.e)+"</sup>";
+  if(t.type==="unit") return fmt(t.a)+" "+t.u+t.unit;
+  if(t.type==="mc") return t.opts[t.a];
+  if(t.type==="match") return t.items.map(i=>i[0]+" → "+(t.raw?i[1]:"10<sup>"+supExp(i[1])+"</sup>")).join(", ");
+}
+
+function renderTabs(){
+  const nav=document.getElementById("tabs"); nav.innerHTML="";
+  S.forEach((s,i)=>{
+    const done=s.tasks.every((t,ti)=>ts(i,ti).done);
+    const b=document.createElement("button");
+    b.innerHTML=s.short+(done?'<span class="chk">✓</span>':"");
+    if(i===st.cur) b.className="active";
+    b.onclick=()=>{st.cur=i;save();render();};
+    nav.appendChild(b);
+  });
+  const b=document.createElement("button");
+  b.textContent="Auswertung"; if(st.cur===S.length) b.className="active";
+  b.onclick=()=>{st.cur=S.length;save();render();};
+  nav.appendChild(b);
+}
+function renderProgress(){
+  let tot=0,d=0; S.forEach((s,i)=>s.tasks.forEach((t,ti)=>{tot++; if(ts(i,ti).done)d++;}));
+  document.getElementById("bar").style.width=(100*d/tot)+"%";
+  document.getElementById("ptext").textContent=d+" von "+tot+" Aufgaben erledigt";
+}
+
+function inputHTML(t,k){
+  const post=t.post?" "+t.post:"";
+  if(t.type==="num") return `<div class="line"><span>${t.pre}</span> <input class="in" id="a${k}" inputmode="decimal" autocomplete="off">${post}</div>`;
+  if(t.type==="exp") return `<div class="line"><span>${t.pre}</span><sup><input class="in" id="a${k}" inputmode="text" autocomplete="off" aria-label="Exponent"></sup>${post}</div>`;
+  if(t.type==="sci") return `<div class="line"><span>${t.pre}</span> <input class="in small" id="m${k}" inputmode="decimal" autocomplete="off" aria-label="Zahl zwischen 1 und 10"> · 10<sup><input class="in" id="e${k}" inputmode="text" autocomplete="off" aria-label="Exponent"></sup>${post}</div>`;
+  if(t.type==="unit") return `<div class="line"><span>${t.pre}</span> <input class="in small" id="a${k}" inputmode="decimal" autocomplete="off" aria-label="Zahl"> <select id="u${k}" aria-label="Einheit"><option value="?">– wählen –</option>${t.opts.map(o=>`<option value="${o}">${o}${t.unit}</option>`).join("")}</select></div>`;
+  if(t.type==="mc") return `<div class="opts">${t.opts.map((o,i)=>`<label><input type="radio" name="r${k}" value="${i}"> <span>${o}</span></label>`).join("")}</div>`;
+  if(t.type==="match") return `<div class="match">${t.items.map((it,i)=>`<span>${it[0]}</span><select id="s${k}_${i}"><option value="">– wählen –</option>${t.choices.map(c=>`<option value="${c}">${t.raw?c:"10^"+supExp(c)}</option>`).join("")}</select>`).join("")}</div>`;
+}
+
+function render(){
+  renderTabs(); renderProgress();
+  const main=document.getElementById("main");
+  if(st.cur>=S.length){ main.innerHTML=summaryHTML(); bindSummary(); return; }
+  const si=st.cur, s=S[si];
+  let h=`<section class="card"><h2>${s.title}</h2><p class="goal">🎯 ${s.goal}</p>
+    <div class="lernkarte"><div class="lk-title">🗂️ Lernkarte</div>${s.merke}</div>`;
+  s.tasks.forEach((t,ti)=>{
+    const k=id(si,ti).replace("-","_");
+    h+=`<div class="task" id="task${k}"><div class="q"><span class="num">${ti+1}</span>${t.q}</div>${inputHTML(t,k)}
+      <div class="btns"><button class="b check" data-k="${k}">Prüfen</button><button class="b tip" data-tip="${k}">💡 Tipp</button><button class="b sol" data-sol="${k}" style="display:none">Lösung zeigen</button></div>
+      <div class="fb" id="fb${k}"></div></div>`;
+  });
+  h+=`<div class="navrow"><button class="ghost" id="prev" ${si===0?"disabled":""}>← Zurück</button><button id="next">${si===S.length-1?"Zur Auswertung →":"Weiter →"}</button></div></section>`;
+  main.innerHTML=h;
+  s.tasks.forEach((t,ti)=>restore(si,ti));
+  main.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>check(b.dataset.k));
+  main.querySelectorAll("[data-tip]").forEach(b=>b.onclick=()=>{
+    const [si2,ti2]=b.dataset.tip.split("_").map(Number); show(b.dataset.tip,"info","💡 "+S[si2].tasks[ti2].hint);
+  });
+  main.querySelectorAll("[data-sol]").forEach(b=>b.onclick=()=>{
+    const [si2,ti2]=b.dataset.sol.split("_").map(Number); const t=S[si2].tasks[ti2], x=ts(si2,ti2);
+    x.done=true; x.rev=true; save(); lock(b.dataset.sol,true);
+    show(b.dataset.sol,"info","Lösung: "+solText(t)+(t.explain?"<br>"+t.explain:"")+"<br>Schau noch einmal auf die Lernkarte."); renderTabs(); renderProgress();
+  });
+  main.querySelectorAll("input.in").forEach(inp=>inp.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){ const k=inp.id.replace(/^[ame]/,""); check(k); }
+  }));
+  document.getElementById("prev").onclick=()=>{st.cur--;save();render();window.scrollTo(0,0);};
+  document.getElementById("next").onclick=()=>{st.cur++;save();render();window.scrollTo(0,0);};
+}
+
+function show(k,cls,msg){ const f=document.getElementById("fb"+k); f.className="fb "+cls; f.innerHTML=msg; }
+function lock(k,done){
+  const box=document.getElementById("task"+k);
+  box.querySelectorAll("input,select,button.check,button.tip,button.sol").forEach(e=>e.disabled=true);
+  if(done) box.classList.add("done");
+}
+function restore(si,ti){
+  const x=ts(si,ti), t=S[si].tasks[ti], k=id(si,ti).replace("-","_");
+  if(x.tries>=2 && !x.done) document.querySelector(`[data-sol="${k}"]`).style.display="";
+  if(!x.done) return;
+  const v=x.val;
+  if(v){
+    if(t.type==="num"||t.type==="exp") document.getElementById("a"+k).value=v;
+    if(t.type==="sci"){ document.getElementById("m"+k).value=v[0]; document.getElementById("e"+k).value=v[1]; }
+    if(t.type==="unit"){ document.getElementById("a"+k).value=v[0]; document.getElementById("u"+k).value=v[1]; }
+    if(t.type==="mc"){ const r=document.querySelector(`input[name="r${k}"][value="${v}"]`); if(r) r.checked=true; }
+    if(t.type==="match") v.forEach((c,i)=>document.getElementById(`s${k}_${i}`).value=c);
+  }
+  lock(k,true);
+  show(k, x.rev?"info":"ok", x.rev?("Lösung: "+solText(t)):("✅ Richtig!"+(t.explain?" "+t.explain:"")));
+}
+
+function check(k){
+  const [si,ti]=k.split("_").map(Number), t=S[si].tasks[ti], x=ts(si,ti);
+  if(x.done) return;
+  let ok=false, msg="", val=null, empty=false;
+  if(t.type==="num"){
+    val=document.getElementById("a"+k).value; const n=norm(val);
+    if(isNaN(n)) empty=true; else { ok=eq(n,t.a);
+      if(!ok){ const w=t.wrong&&Object.keys(t.wrong).find(k=>eq(n,Number(k))); msg = w ? t.wrong[w] : ((n>0&&t.a>0&&Number.isInteger(Math.round(Math.log10(n/t.a)*1e6)/1e6))?"Fast! Die Ziffern stimmen, aber das Komma steht an der falschen Stelle. Zähle die Stellen noch einmal.":"Leider falsch. Schau auf die Lernkarte: Welche Zahl steckt in der Vorsilbe?"); } }
+  }
+  if(t.type==="exp"){
+    val=document.getElementById("a"+k).value; const n=norm(val);
+    if(isNaN(n)) empty=true; else { ok=eq(n,t.a);
+      if(!ok) msg = (n===-t.a) ? "Fast! Achte auf das Vorzeichen des Exponenten." : "Leider falsch. Zähle die Nullen bzw. Stellen noch einmal."; }
+  }
+  if(t.type==="sci"){
+    const mv=document.getElementById("m"+k).value, ev=document.getElementById("e"+k).value; val=[mv,ev];
+    const m=norm(mv), e=norm(ev);
+    if(isNaN(m)||isNaN(e)) empty=true;
+    else if(!Number.isInteger(e)) msg="Der Exponent muss eine ganze Zahl sein.";
+    else {
+      const sameVal=eq(m*Math.pow(10,e), t.m*Math.pow(10,t.e)), normd=(m>=1&&m<10);
+      if(sameVal&&normd) ok=true;
+      else if(sameVal) msg="Der Wert stimmt – aber die Zahl vor dem Malpunkt muss <b>zwischen 1 und 10</b> liegen. Verschiebe das Komma und passe den Exponenten an.";
+      else if(eq(m,t.m)&&e===-t.e) msg="Die Zahl vorne stimmt! Aber das Vorzeichen des Exponenten ist falsch: große Zahl → positiv, kleine Zahl → negativ.";
+      else if(eq(m,t.m)) msg="Die Zahl vorne stimmt! Prüfe den Exponenten: Um wie viele Stellen wandert das Komma?";
+      else msg="Leider falsch. Setze das Komma hinter die erste Ziffer, die keine Null ist.";
+    }
+  }
+  if(t.type==="unit"){
+    const nv=document.getElementById("a"+k).value, uv=document.getElementById("u"+k).value; val=[nv,uv];
+    const n=norm(nv);
+    if(isNaN(n)||uv==="?") empty=true;
+    else {
+      const same=eq(n*FAC[uv], t.a*FAC[t.u]), handy=(n>=1&&n<1000);
+      if(same&&(uv===t.u||handy)) ok=true;
+      else if(same) msg="Der Wert stimmt – aber wähle eine Vorsilbe, mit der eine <b>handliche Zahl</b> (1 bis 999) entsteht.";
+      else if(uv===t.u) msg="Die Vorsilbe passt! Prüfe die Zahl: Wie oft musst du durch 1 000 teilen bzw. mal 1 000 rechnen?";
+      else if(eq(n,t.a)) msg="Die Zahl stimmt! Aber die Vorsilbe passt nicht dazu.";
+      else msg="Leider falsch. Schau dir den Tipp an.";
+    }
+  }
+  if(t.type==="mc"){
+    const r=document.querySelector(`input[name="r${k}"]:checked`);
+    if(!r) empty=true; else { val=r.value; ok=Number(r.value)===t.a; if(!ok) msg="Leider falsch. Schau noch einmal auf die Lernkarte."; }
+  }
+  if(t.type==="match"){
+    val=t.items.map((it,i)=>document.getElementById(`s${k}_${i}`).value);
+    if(val.some(v=>v==="")) empty=true;
+    else { const wrong=t.items.filter((it,i)=>val[i]!==it[1]).length; ok=wrong===0;
+      if(!ok) msg=`${wrong} von ${t.items.length} Zuordnungen sind noch falsch.`; }
+  }
+  if(empty){ show(k,"info","Bitte fülle zuerst alles aus."); return; }
+  x.tries++;
+  if(ok){
+    x.done=true; x.first=(x.tries===1); x.val=val; save(); lock(k,true);
+    show(k,"ok","✅ Richtig!"+(x.first?" Auf Anhieb – super!":"")+(t.explain?" "+t.explain:""));
+    renderTabs(); renderProgress();
+  } else {
+    save(); show(k,"bad","❌ "+msg+(x.tries>=2?"<br>Du kannst einen Tipp ansehen oder dir die Lösung zeigen lassen.":""));
+    if(x.tries>=2) document.querySelector(`[data-sol="${k}"]`).style.display="";
+  }
+}
+
+function summaryHTML(){
+  let rows="", T=0,F=0,R=0;
+  S.forEach((s,i)=>{
+    let f=0,r=0,o=0; s.tasks.forEach((t,ti)=>{const x=ts(i,ti); if(x.done&&x.first)f++; else if(x.rev)r++; else if(x.done)o++;});
+    const n=s.tasks.length, q=f/n, col=q>=0.8?"#1f8a4c":q>=0.5?"#e0a400":"#c23b3b";
+    T+=n;F+=f;R+=r;
+    rows+=`<tr><td><span class="ampel" style="background:${col}"></span>${s.title}</td><td>${f} / ${n}</td><td>${o}</td><td>${r}</td></tr>`;
+  });
+  const q=F/T;
+  const msg=q>=0.8?"🌟 Sehr stark! Du rechnest Vorsilben sicher um.":q>=0.5?"👍 Gut gemacht! Wiederhole die Stationen mit gelber oder roter Ampel.":"💪 Bleib dran! Schau dir die Lernkarten noch einmal an und bearbeite die Stationen mit roter Ampel erneut.";
+  return `<section class="card"><h2>Auswertung</h2>
+  <p class="goal">Hier siehst du, wie es gelaufen ist. Die Ampel zeigt, wie viele Aufgaben du auf Anhieb gelöst hast.</p>
+  <table class="res"><tr><th>Station</th><th>Auf Anhieb richtig</th><th>Mit 2.+ Versuch</th><th>Lösung angesehen</th></tr>${rows}
+  <tr><th>Gesamt</th><th>${F} / ${T}</th><th></th><th>${R}</th></tr></table>
+  <p><b>${msg}</b></p>
+  <div class="navrow"><button class="ghost" id="back">← Zurück zum Check</button><button class="ghost" id="reset">🔄 Alles zurücksetzen</button></div></section>`;
+}
+function bindSummary(){
+  document.getElementById("back").onclick=()=>{st.cur=S.length-1;save();render();};
+  document.getElementById("reset").onclick=()=>{ if(confirm("Wirklich alle Antworten löschen und neu beginnen?")){ st={cur:0,t:{}}; save(); render(); window.scrollTo(0,0);} };
+}
+render();
+</script>
+</body>
+</html>
